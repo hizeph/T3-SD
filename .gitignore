@@ -215,3 +215,5 @@ pip-log.txt
 .mr.developer.cfg
 /T3Interfaces/nbproject/private/
 /Client/nbproject/private/
+/Frontend/nbproject/private/
+/FileServer/nbproject/private/

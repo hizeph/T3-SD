@@ -1,9 +1,11 @@
 
 package client;
+import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.Remote;
+import java.rmi.*;
+import java.rmi.server.*;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,27 +18,23 @@ import t3interfaces.IServidor;
 * usar o remoteFrontend.search(music, ICliente)
 * usar o this.deliver()
 */
-public class Client implements ICliente{
+public class Client extends UnicastRemoteObject implements ICliente{
     private IServidor remoteFrontend;
     
-    public Client(){
+    public Client() throws RemoteException{
     }
     
     public void run(){
         try {
-            remoteFrontend = (IServidor) Naming.lookup("frontend");
-        } catch (NotBoundException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (RemoteException ex) {
+            remoteFrontend = (IServidor) Naming.lookup("Frontend");
+            remoteFrontend.search("s", this);
+        } catch (NotBoundException | MalformedURLException | RemoteException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     @Override
-    public byte[] deliver() throws RemoteException {
-        byte[] b = "blablabla".getBytes();
-        return b;
+    public void deliver(byte[] musicBytes) throws RemoteException {
+        System.out.println("received");
     }
 }
