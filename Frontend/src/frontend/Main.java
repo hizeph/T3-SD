@@ -16,7 +16,7 @@ public class Main {
      */
    
     public static void main(String[] args) {
-        System.setSecurityManager(new RMISecurityManager());
+        //System.setSecurityManager(new RMISecurityManager());
         String hostURL = "Frontend";
         
         try {
@@ -24,6 +24,7 @@ public class Main {
             Frontend frontend = new Frontend(1);
             
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
+            
             Naming.bind(hostURL, frontend);
             
         } catch (RemoteException | AlreadyBoundException | MalformedURLException ex) {

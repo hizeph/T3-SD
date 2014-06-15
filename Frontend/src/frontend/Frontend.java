@@ -29,7 +29,11 @@ public class Frontend extends UnicastRemoteObject implements IServidor, Serializ
 
     @Override
     public void search(String music, ICliente c) throws RemoteException {
+        
         fileServer = serverList.get(roundRobinIndex);
+        
+        //while (fileServer.isInterrupted()){}
+        
         fileServer = new ServerController(fileServer.getPort(), music, c);
         fileServer.start();
         roundRobin();

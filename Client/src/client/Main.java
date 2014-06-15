@@ -11,7 +11,7 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.setSecurityManager(new RMISecurityManager());
+        //System.setSecurityManager(new RMISecurityManager());
         
         Client c;
         try {

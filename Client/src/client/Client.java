@@ -27,6 +27,7 @@ public class Client extends UnicastRemoteObject implements ICliente{
     public void run(){
         try {
             remoteFrontend = (IServidor) Naming.lookup("Frontend");
+            System.out.println("search");
             remoteFrontend.search("s", this);
         } catch (NotBoundException | MalformedURLException | RemoteException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
