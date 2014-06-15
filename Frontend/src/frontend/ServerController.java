@@ -66,6 +66,8 @@ public class ServerController extends Thread implements Serializable{
             
             this.client.deliver(message.getMusicBytes());
             System.out.println("delivered");
+            
+            socket.close();
             this.interrupt();
         } catch (RemoteException ex) {
             Logger.getLogger(ServerController.class.getName()).log(Level.SEVERE, null, ex);

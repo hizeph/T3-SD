@@ -21,7 +21,7 @@ public class Main {
         
         try {
             
-            Frontend frontend = new Frontend(1);
+            Frontend frontend = new Frontend(2);
             
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
             

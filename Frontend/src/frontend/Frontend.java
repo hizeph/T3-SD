@@ -20,7 +20,7 @@ public class Frontend extends UnicastRemoteObject implements IServidor, Serializ
         serverList = new ArrayList<>();
         
         for (int i=0;i<nServers;i++){
-            fileServer = new ServerController(port+i);
+            fileServer = new ServerController(port+(i*2));
             serverList.add(fileServer);
         }
         

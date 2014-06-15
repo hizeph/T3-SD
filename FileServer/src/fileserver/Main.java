@@ -11,12 +11,19 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        try {
-            FileServer fs = new FileServer(2021);
-            fs.run();
-        } catch (SocketException ex) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        int startingPort = 2021;
+        FileServer fs;
+        boolean work = false;
+        do {
+            try {
+                fs = new FileServer(startingPort);
+                work=true;
+                fs.run();
+            } catch (SocketException ex) {
+                startingPort+=2;
+            }
+        } while(!work);
+       
     }
     
 }

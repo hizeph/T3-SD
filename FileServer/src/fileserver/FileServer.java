@@ -43,12 +43,14 @@ public class FileServer {
     }
     
     public void run(){
+        System.out.println("Listening port "+port);
         try {
             while (true) {
                 packet = new DatagramPacket(buffer, buffer.length);
                 
                 socket.receive(packet);
                 System.out.println("receive");
+                
                 buffer = packet.getData();
                 message = Message.toMessage(buffer);
                 
@@ -77,7 +79,7 @@ public class FileServer {
     
     private void deliver(){
         try {
-            packet = new DatagramPacket(buffer, buffer.length, frontendAddr, 2020);
+            packet = new DatagramPacket(buffer, buffer.length, frontendAddr, port-1);
             packet.setData(Message.toByte(message));
             socket.send(packet);
         } catch (IOException ex) {
