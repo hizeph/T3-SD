@@ -1,5 +1,8 @@
 
 package client;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -20,15 +23,17 @@ import t3interfaces.IServidor;
 */
 public class Client extends UnicastRemoteObject implements ICliente{
     private IServidor remoteFrontend;
+    private String request;
     
     public Client() throws RemoteException{
     }
     
-    public void run(){
+    public void run(String request){
         try {
+            this.request = request;
             remoteFrontend = (IServidor) Naming.lookup("Frontend");
-            System.out.println("search");
-            remoteFrontend.search("s", this);
+            System.out.println("> Searching");
+            remoteFrontend.search(request, this);
         } catch (NotBoundException | MalformedURLException | RemoteException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -36,6 +41,18 @@ public class Client extends UnicastRemoteObject implements ICliente{
     
     @Override
     public void deliver(byte[] musicBytes) throws RemoteException {
-        System.out.println("received");
+        try {
+            System.out.println("> Received");
+            FileOutputStream music;
+            String path = System.getProperty("user.dir") + System.getProperty("file.separator") + request;
+            music = new FileOutputStream(path);
+            music.write(musicBytes, 0, musicBytes.length);
+            music.close();
+            System.out.println("> Saved on: " + path);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

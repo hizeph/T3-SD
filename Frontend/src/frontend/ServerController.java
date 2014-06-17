@@ -58,17 +58,18 @@ public class ServerController extends Thread implements Serializable{
             packet = new DatagramPacket(buffer, buffer.length, InetAddress.getLocalHost(),fileServerPort);
             
             socket.send(packet);
-            System.out.println("sent");
+            System.out.println("> Sent to file server: " + fileServerPort);
             
             socket.receive(packet);
             message = Message.toMessage(packet.getData());
-            System.out.println("received");
+            System.out.println("> Received from file server");
             
             this.client.deliver(message.getMusicBytes());
-            System.out.println("delivered");
+            System.out.println("> Delivered to client");
             
             socket.close();
             this.interrupt();
+            
         } catch (RemoteException ex) {
             Logger.getLogger(ServerController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

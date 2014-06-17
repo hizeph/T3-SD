@@ -11,12 +11,11 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        //System.setSecurityManager(new RMISecurityManager());
         
         Client c;
         try {
             c = new Client();
-            c.run();
+            c.run("musica.mp3");
         } catch (RemoteException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }

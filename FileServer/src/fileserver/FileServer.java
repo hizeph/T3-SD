@@ -34,28 +34,31 @@ public class FileServer {
         buffer = new byte[bufferSize];
         databasePath = System.getProperty("user.dir") + System.getProperty("file.separator");
         socket = new DatagramSocket(port);
-        
+        socket.close();
         try {
             frontendAddr = InetAddress.getByName("localhost");
         } catch (UnknownHostException ex) {
             Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
     public void run(){
         System.out.println("Listening port "+port);
         try {
             while (true) {
+                socket = new DatagramSocket(port);
                 packet = new DatagramPacket(buffer, buffer.length);
                 
+                System.out.println("> Waiting request: " + port); // from frontend
                 socket.receive(packet);
-                System.out.println("receive");
-                
                 buffer = packet.getData();
                 message = Message.toMessage(buffer);
+                System.out.println("> Request received");
                 
                 search(message.getName());
-                deliver();
+                deliver(message);
+                socket.close();
                 
             }
         } catch (IOException ex) {
@@ -77,7 +80,7 @@ public class FileServer {
         }
     }
     
-    private void deliver(){
+    private void deliver(Message message){
         try {
             packet = new DatagramPacket(buffer, buffer.length, frontendAddr, port-1);
             packet.setData(Message.toByte(message));
