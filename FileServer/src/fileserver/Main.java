@@ -9,6 +9,8 @@ public class Main {
         int startingPort = 2021;
         FileServer fs;
         boolean work = false;
+        // gambiarrinha pra usar uma porta diferente pra cada FileServer (somente impares, começando da 2021
+        // a porta startingPort-1 é utilizada pelo Frontend para receber a resposta
         do {
             try {
                 fs = new FileServer(startingPort);
@@ -18,7 +20,6 @@ public class Main {
                 startingPort+=2;
             }
         } while(!work);
-       
     }
     
 }

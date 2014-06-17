@@ -10,18 +10,15 @@ import java.util.logging.Logger;
 
 
 public class Main {
-
-    /**
-     * @param args the command line arguments
-     */
    
     public static void main(String[] args) {
         
         String hostURL = "Frontend";
         
         try {
-            
-            Frontend frontend = new Frontend(1);
+            // argumendo é o número de FileServers
+            // aumentar só pra testar o Round Robin (ta funcionando no UDP)
+            Frontend frontend = new Frontend(1); 
             
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
             

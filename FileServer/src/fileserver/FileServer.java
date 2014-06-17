@@ -34,7 +34,7 @@ public class FileServer {
         buffer = new byte[bufferSize];
         databasePath = System.getProperty("user.dir") + System.getProperty("file.separator");
         socket = new DatagramSocket(port);
-        socket.close();
+        socket.close(); // sim, precisa disso
         try {
             frontendAddr = InetAddress.getByName("localhost");
         } catch (UnknownHostException ex) {
