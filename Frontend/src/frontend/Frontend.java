@@ -1,11 +1,14 @@
 package frontend;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import t3interfaces.ICliente;
 import t3interfaces.IServidor;
 import java.rmi.*;
 import java.rmi.server.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class Frontend extends UnicastRemoteObject implements IServidor, Serializable {
@@ -32,9 +35,13 @@ public class Frontend extends UnicastRemoteObject implements IServidor, Serializ
         
         fileServer = serverList.get(roundRobinIndex);
         
-        //while (fileServer.isInterrupted()){}
-        
-        fileServer = new ServerController(fileServer.getPort(), music, c);
+        try {
+            //while (fileServer.isInterrupted()){}
+
+            fileServer = new ServerController(fileServer.getPort(), music, c);
+        } catch (IOException ex) {
+            Logger.getLogger(Frontend.class.getName()).log(Level.SEVERE, null, ex);
+        }
         fileServer.start();
         roundRobin();
     }

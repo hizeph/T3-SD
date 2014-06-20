@@ -1,11 +1,12 @@
 
 package fileserver;
 
+import java.io.IOException;
 import java.net.SocketException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         int startingPort = 2021;
         FileServer fs;
         boolean work = false;
