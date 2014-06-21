@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -30,73 +31,47 @@ public class FileServer {
     private FileInputStream music;
     private byte[] output;
     private int nBytes;
-    private DatagramSocket socket;
-    private DatagramPacket packet;
     private InetAddress frontendAddr;
-    
-    private ServerSocket servsock;
-    private Socket s;
-    private InputStream is;
-    private OutputStream os;
+    private ServerSocket serverSocket;
+    private Socket socket;
+    private InputStream inputStream;
+    private ObjectOutputStream objOutpuStream;
     
     public FileServer(int port) throws SocketException, IOException {
-        this.port=port;
         
-        //tcp
-        servsock = new ServerSocket(port); 
+        this.port = port;
+        serverSocket = new ServerSocket(port); 
         databasePath = System.getProperty("user.dir") + System.getProperty("file.separator");
         
-        
-        //end tcp
-//        this.port = port;
-//        buffer = new byte[bufferSize];
-//        databasePath = System.getProperty("user.dir") + System.getProperty("file.separator");
-//        socket = new DatagramSocket(port);
-//        socket.close(); // sim, precisa disso
         try {
             frontendAddr = InetAddress.getByName("localhost");
         } catch (UnknownHostException ex) {
             Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        } 
     }
     
     public void run(){
         System.out.println("Listening port "+port);
         try {
             while (true) {
-                //tcp
-                s= servsock.accept();
-                is = s.getInputStream();
                 
+                socket = serverSocket.accept();
+                inputStream = socket.getInputStream();
                 
                 buffer = new byte[bufferSize];
-                is.read(buffer,0,bufferSize);
+                inputStream.read(buffer,0,bufferSize);
                 System.out.println("> recebido ");
                 
                 message = Message.toMessage(buffer);
                 System.out.println("> mensage:" + message.getName());
+                
                 search(message.getName());
                 System.out.println("> feito Search");
+                
                 deliver(message);
                 System.out.println("> em teoria, enviado");
                                 
-                s.close();
-                //end
-                
-//                socket = new DatagramSocket(port);
-//                packet = new DatagramPacket(buffer, buffer.length);
-//                
-//                System.out.println("> Waiting request: " + port); // from frontend
-//                socket.receive(packet);
-//                buffer = packet.getData();
-//                message = Message.toMessage(buffer);
-//                System.out.println("> Request received");
-//                
-//                search(message.getName());
-//                deliver(message);
-//                socket.close();
-                
+                socket.close();
             }
         } catch (IOException ex) {
             Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
@@ -121,25 +96,17 @@ public class FileServer {
         try {
             //tcp
             
-            
-            os = s.getOutputStream();
-//            os = s.getOutputStream();
+            objOutpuStream = new ObjectOutputStream(socket.getOutputStream());
+
             System.out.println("> Enviando... ");
             byte[] b = Message.toByte(message);
-            System.out.println("> . ");
-            os.write(b,0,b.length);
-            System.out.println("> . ");
-            os.close();
-//            os.write(Message.toByte(message),0,bufferSize);
-            System.out.println("> Enviado ");
-//            os.flush();
-            
-            //end
-            
-            //antigo
-//            packet = new DatagramPacket(buffer, buffer.length, frontendAddr, port-1);
-//            packet.setData(Message.toByte(message));
-//            socket.send(packet);
+            System.out.println(">" + b.length);
+            objOutpuStream.flush();
+            objOutpuStream.write(b,0,b.length);
+            objOutpuStream.flush();
+            objOutpuStream.close();
+            System.out.println("> Enviado");
+
         } catch (IOException ex) {
             Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
         }

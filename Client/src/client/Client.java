@@ -48,6 +48,7 @@ public class Client extends UnicastRemoteObject implements ICliente {
                 FileOutputStream music;
                 String path = System.getProperty("user.dir") + System.getProperty("file.separator") + request;
                 music = new FileOutputStream(path);
+                System.out.println("tamanho: "+musicBytes.length);
                 music.write(musicBytes, 0, musicBytes.length);
                 music.close();
                 System.out.println("> Saved on: " + path);
