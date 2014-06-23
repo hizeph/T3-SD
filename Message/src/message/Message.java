@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +27,8 @@ public class Message implements Serializable {
         this.name = name;
         this.size = size;
         this.musicBytes = new byte[size];
-        this.musicBytes = musicBytes;
+        if (size > 0)
+            this.musicBytes = Arrays.copyOf(musicBytes, size);
         valid = true;
     }
 

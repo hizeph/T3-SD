@@ -36,8 +36,6 @@ public class Frontend extends UnicastRemoteObject implements IServidor, Serializ
         fileServer = serverList.get(roundRobinIndex);
         
         try {
-            //while (fileServer.isInterrupted()){}
-
             fileServer = new ServerController(fileServer.getPort(), music, c);
         } catch (IOException ex) {
             Logger.getLogger(Frontend.class.getName()).log(Level.SEVERE, null, ex);

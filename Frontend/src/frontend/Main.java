@@ -18,7 +18,7 @@ public class Main {
         try {
             // argumendo é o número de FileServers
             // aumentar só pra testar o Round Robin (ta funcionando no UDP)
-            Frontend frontend = new Frontend(1); 
+            Frontend frontend = new Frontend(3); 
             
             LocateRegistry.createRegistry(Registry.REGISTRY_PORT);
             

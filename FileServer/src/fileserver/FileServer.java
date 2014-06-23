@@ -35,7 +35,7 @@ public class FileServer {
     private ServerSocket serverSocket;
     private Socket socket;
     private InputStream inputStream;
-    private ObjectOutputStream objOutpuStream;
+    private ObjectOutputStream objOutputStream;
     
     public FileServer(int port) throws SocketException, IOException {
         
@@ -60,16 +60,14 @@ public class FileServer {
                 
                 buffer = new byte[bufferSize];
                 inputStream.read(buffer,0,bufferSize);
-                System.out.println("> recebido ");
                 
                 message = Message.toMessage(buffer);
-                System.out.println("> mensage:" + message.getName());
+                System.out.println("> Request: " + message.getName());
                 
                 search(message.getName());
-                System.out.println("> feito Search");
                 
-                deliver(message);
-                System.out.println("> em teoria, enviado");
+                deliver();
+                System.out.println("> Sent to frontend");
                                 
                 socket.close();
             }
@@ -83,30 +81,25 @@ public class FileServer {
             output = new byte[bufferSize];
             // look in database
             music = new FileInputStream(databasePath + musicName);
-            nBytes = music.read(output, 0, bufferSize);
+            nBytes = music.read(output);        
             message = new Message(output, nBytes, musicName);
             music.close();
+            System.out.println("> Request found on server");
         } catch (FileNotFoundException ex) {
             message = new Message();
             System.out.println("!> Request not found on server " + port);
         }
     }
     
-    private void deliver(Message message){
+    private void deliver(){
         try {
-            //tcp
+            objOutputStream = new ObjectOutputStream(socket.getOutputStream());
+
+            objOutputStream.flush();
+            objOutputStream.writeObject(message);
+            objOutputStream.flush();
+            objOutputStream.close();
             
-            objOutpuStream = new ObjectOutputStream(socket.getOutputStream());
-
-            System.out.println("> Enviando... ");
-            byte[] b = Message.toByte(message);
-            System.out.println(">" + b.length);
-            objOutpuStream.flush();
-            objOutpuStream.write(b,0,b.length);
-            objOutpuStream.flush();
-            objOutpuStream.close();
-            System.out.println("> Enviado");
-
         } catch (IOException ex) {
             Logger.getLogger(FileServer.class.getName()).log(Level.SEVERE, null, ex);
         }
