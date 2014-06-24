@@ -3,11 +3,9 @@ package client;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
-import java.rmi.*;
 import java.rmi.server.*;
 import java.rmi.RemoteException;
 import java.util.logging.Level;
@@ -45,11 +43,13 @@ public class Client extends UnicastRemoteObject implements ICliente {
         if (musicBytes != null) {
             try {
                 System.out.println("> Received");
+                
                 FileOutputStream music;
                 String path = System.getProperty("user.dir") + System.getProperty("file.separator") + request;
                 music = new FileOutputStream(path);
                 music.write(musicBytes, 0, musicBytes.length);
                 music.close();
+                
                 System.out.println("> Saved on: " + path);
             } catch (FileNotFoundException ex) {
                 Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

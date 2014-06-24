@@ -1,4 +1,3 @@
-
 package frontend;
 
 import java.net.MalformedURLException;
